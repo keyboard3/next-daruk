@@ -1,9 +1,10 @@
-import type { NextPage } from 'next'
+import type { NextPage, NextPageContext } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
+import { getApi } from '../server/req'
 import styles from '../styles/Home.module.css'
 
-const Home: NextPage = () => {
+const Home: NextPage = ({ name }: any) => {
   return (
     <div className={styles.container}>
       <Head>
@@ -14,7 +15,7 @@ const Home: NextPage = () => {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
+          Welcome to <a href="https://nextjs.org">尊贵 {name}</a>
         </h1>
 
         <p className={styles.description}>
@@ -70,3 +71,10 @@ const Home: NextPage = () => {
 }
 
 export default Home
+
+export async function getServerSideProps(context: NextPageContext) {
+  const res = await getApi('vipName')
+  return {
+    props: { name: res }, // will be passed to the page component as props
+  }
+}

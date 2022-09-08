@@ -32,6 +32,13 @@ app.prepare().then(() => {
   }).listen(port, handleError as any)
 })
 function handleError(err: any) {
+  console.log("----handleError ")
   if (err) throw err
   console.log(`> Ready on http://${hostname}:${port}`)
 }
+
+
+process.on('uncaughtException', err => {
+  console.error('有一个未捕获的错误', err)
+  process.exit(1) //强制性的（根据 Node.js 文档）
+})
