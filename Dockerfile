@@ -11,4 +11,5 @@ COPY . .
 RUN npm run build
 
 ENV NODE_ENV=production
+ENV BASE_PATH=/next-daruk
 CMD ["npm","run", "start:prd"]
