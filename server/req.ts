@@ -1,13 +1,12 @@
-import { getAppServer } from "./";
 import compose from "koa-compose";
 export async function getApi(url: string, query?: any) {
-  const appServer = await getAppServer();
-  const mockCtx = appServer.mockContext({
+  const darukApp = (global as any).darukApp;
+  const mockCtx = darukApp.mockContext({
     url: `/api/${url}`,
     path: `/api/${url}`,
     method: 'GET',
   })
-  const koa = appServer.app;
+  const koa = darukApp.app;
   return new Promise((resolve, reject) => {
     const fn = compose([async (ctx: typeof mockCtx, next: () => Promise<any>) => {
       await next();

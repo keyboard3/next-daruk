@@ -2,6 +2,7 @@
 import { createServer } from "http";
 import { parse } from "url";
 import next from "next";
+
 import apiRouter from "./server/index";
 
 const dev = process.env.NODE_ENV !== 'production'
@@ -31,7 +32,7 @@ app.prepare().then(() => {
       res.end('internal server error')
     }
   }).listen(port, handleError as any)
-})
+}).catch(err => console.error(err));
 function handleError(err: any) {
   if (err) throw err
   console.log(`> Ready on http://${hostname}:${port}`)
