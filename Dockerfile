@@ -5,8 +5,8 @@ COPY package.json yarn.lock ./
 
 # If you have native dependencies, you'll need extra tools
 # RUN apk add --no-cache make gcc g++ python3
-RUN yarn config set registry https://registry.npm.taobao.org/
-RUN yarn
+RUN npm config set registry http://mirrors.cloud.tencent.com/npm/
+RUN npm i 
 COPY . .
 RUN npm run build
 
