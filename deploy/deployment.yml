@@ -19,4 +19,4 @@ spec:            #这是对于该Deployment的形容，能够了解为你期待�
       - name: ${projectName}    #container的名称
         image: keyboard3/${projectName}:master    #应用镜像nginx创立container，
         ports:
-          - containerPort: 80   #外部服务裸露的端口
+          - containerPort: 3000   #外部服务裸露的端口
