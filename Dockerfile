@@ -4,7 +4,7 @@ WORKDIR /app
 COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile
 
-FROM mhart/alpine-node:12 AS serverDeps
+FROM mhart/alpine-node:12 AS serverdeps
 WORKDIR /app
 COPY package.json yarn.lock ./
 RUN yarn add daruk
@@ -14,7 +14,7 @@ COPY . .
 RUN yarn build
 RUN npx tsc -p tsconfig.server.json
 
-FROM serverDeps AS runner
+FROM serverdeps AS runner
 WORKDIR /app
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
