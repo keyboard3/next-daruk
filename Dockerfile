@@ -1,14 +1,27 @@
 # This stage installs our modules
-FROM mhart/alpine-node:12
+FROM mhart/alpine-node:12 AS deps
 WORKDIR /app
 COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile
 
-# If you have native dependencies, you'll need extra tools
-# RUN apk add --no-cache make gcc g++ python3
-RUN yarn
+FROM mhart/alpine-node:12 AS serverDeps
+WORKDIR /app
+COPY package.json yarn.lock ./
+RUN yarn add daruk
+
+FROM deps AS builder
 COPY . .
-RUN npm run build
+RUN yarn build
+RUN npx tsc -p tsconfig.server.json
+
+FROM serverDeps AS runner
+WORKDIR /app
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/server.js ./
+COPY --from=builder /app/server ./server
 
 ENV NODE_ENV=production
 ENV BASE_PATH=/next-daruk
-CMD ["npm","run", "start:prd"]
+CMD ["node","server.js"]
