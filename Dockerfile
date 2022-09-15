@@ -7,12 +7,12 @@ RUN yarn install --frozen-lockfile
 FROM mhart/alpine-node:12 AS serverdeps
 WORKDIR /app
 COPY package.json yarn.lock ./
-RUN yarn add daruk
+RUN NODE_ENV=production yarn add daruk
 
 FROM deps AS builder
 COPY . .
 RUN yarn build
-RUN npx tsc -p tsconfig.server.json
+RUN npx tsc -p tsconfig.server.json && node generateServer.js
 
 FROM serverdeps AS runner
 WORKDIR /app
